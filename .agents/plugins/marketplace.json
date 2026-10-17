@@ -1,0 +1,12 @@
+{
+  "name": "local-minimax-video",
+  "interface": {"displayName": "Local MiniMax Video"},
+  "plugins": [
+    {
+      "name": "minimax-comfy",
+      "source": {"source": "local", "path": "."},
+      "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+      "category": "Creativity"
+    }
+  ]
+}

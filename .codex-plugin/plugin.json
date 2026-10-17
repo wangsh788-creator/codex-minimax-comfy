@@ -1,0 +1,9 @@
+{
+  "name": "minimax-comfy",
+  "version": "0.1.0",
+  "description": "Use the installed MiniMax H3 and ComfyUI to generate local videos with sound.",
+  "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
+  "license": "MIT",
+  "author": {"name": "wangsh788-creator"}
+}
