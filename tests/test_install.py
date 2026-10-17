@@ -17,7 +17,8 @@ class InstallTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="minimax-public-setup-")
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        # PowerShell resolves its script directory, including Windows 8.3 aliases.
+        self.root = Path(self.temp.name).resolve()
         self.plugin = self.root / "插件 with spaces"
         self.plugin.mkdir()
         for filename in ("install.ps1", "config.example.json"):

@@ -23,7 +23,7 @@ class StartComfyTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="codex-comfy-launch-test-")
         self.addCleanup(self.temporary.cleanup)
-        self.root = Path(self.temporary.name)
+        self.root = Path(self.temporary.name).resolve()
         self.portable = self.root / "package" / "runtime" / "ComfyUI_windows_portable"
         self.comfy_root = self.portable / "ComfyUI"
         self.comfy_root.mkdir(parents=True)

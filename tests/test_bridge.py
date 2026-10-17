@@ -40,7 +40,9 @@ class BridgeTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        root = Path(self.temp.name)
+        # Windows TMP may contain an 8.3 alias; compare canonical paths.
+        self.root = Path(self.temp.name).resolve()
+        root = self.root
         config = {
             "comfy_url": "http://127.0.0.1:8188",
             "comfy_root": str(root / "comfy"),
@@ -52,7 +54,7 @@ class BridgeTests(unittest.TestCase):
         self.bridge = VideoBridge(path)
 
     def test_missing_config_explains_local_setup(self):
-        missing = Path(self.temp.name) / "missing-config.json"
+        missing = self.root / "missing-config.json"
         with self.assertRaises(BridgeError) as raised:
             VideoBridge(missing)
         self.assertIn("install.ps1", str(raised.exception))
@@ -60,7 +62,7 @@ class BridgeTests(unittest.TestCase):
         self.assertIn(str(missing), str(raised.exception))
 
     def test_relative_installation_paths_are_anchored_to_config_and_passed_to_launcher(self):
-        root = Path(self.temp.name)
+        root = self.root
         settings = root / "配置 directory"
         settings.mkdir()
         config_path = settings / "config.json"
@@ -348,7 +350,7 @@ class BridgeTests(unittest.TestCase):
                 launcher.assert_not_called()
 
     def test_start_refuses_running_comfy_from_another_directory(self):
-        self.bridge._request = Mock(return_value={"system": {"argv": [str(Path(self.temp.name) / "other" / "main.py")]}})
+        self.bridge._request = Mock(return_value={"system": {"argv": [str(self.root / "other" / "main.py")]}})
         launcher = Mock()
         with patch.dict(sys.modules, {"start_comfy": types.SimpleNamespace(start_backend=launcher)}):
             with self.assertRaisesRegex(BridgeError, "不一致"):
